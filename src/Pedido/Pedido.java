@@ -10,10 +10,6 @@ public class Pedido {
     private StatusPedido status;
     private final List<ObservadorPedido> observadores = new ArrayList<>();
 
-    public void adicionarObservador(ObservadorPedido observador) {
-        observadores.add(observador);
-    }
-
     private void notificarObservadores() {
         for (ObservadorPedido obs : observadores) {
             obs.atualizar(this);
@@ -43,5 +39,9 @@ public class Pedido {
             subtotal += item.getValor(); // Realiza a soma para o valor da compra
         }
         return metodoPagamento.calcular(subtotal);
+    }
+
+    public boolean estaVazio() {
+        return this.itens.isEmpty();
     }
 }

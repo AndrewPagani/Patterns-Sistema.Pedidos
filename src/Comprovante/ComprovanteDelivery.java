@@ -14,7 +14,7 @@ public class ComprovanteDelivery implements Comprovante {
         double totalComTaxa = pedido.calcularTotal() + taxaDeDelivery;
 
         System.out.println("====================================");
-        System.out.println("       🧾 COMPROVANTE DELIVERY      ");
+        System.out.println("         COMPROVANTE DELIVERY      ");
         System.out.println("====================================");
         System.out.println(" Status: " + pedido.getStatus());
         System.out.println(" Taxa de Entrega: R$5,00");

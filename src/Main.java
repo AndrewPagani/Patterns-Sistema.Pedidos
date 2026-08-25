@@ -1,9 +1,12 @@
+import Pagamento.PagamentoCartao;
+import Pagamento.PagamentoPix;
+import Pagamento.PagamentoVoucher;
 import Pedido.Pedido;
 import Pedido.Item;
-import Pedido.StatusPedido;
 import Pedido.Cardapio;
-
-import java.awt.*;
+import Pedido.StatusPedido;
+import Comprovante.ComprovanteFactory;
+import Comprovante.Comprovante;
 import java.util.Scanner;
 
 public class Main {
@@ -22,10 +25,13 @@ public class Main {
 
             int opcao = scanner.nextInt();
 
-            if (opcao == 4) {
-                montandoPedido = false;
-                continue;
-            }
+                if (opcao == 4) {
+                    if (pedido.estaVazio()) {
+                        System.out.println("Seu carrinho está vazio!");
+                        continue;
+                    }
+                    break;
+                }
 
             Item itemSelecionado;
 
@@ -44,8 +50,6 @@ public class Main {
                     continue;
             }
 
-            // Necessário verificar se há ou não itens no carrinho, para evitar o erro.
-
             System.out.print("Digite a quantidade desejada ");
             int quantidade = scanner.nextInt();
 
@@ -56,7 +60,49 @@ public class Main {
             System.out.println(quantidade + "x " + itemSelecionado.getNome() + " adicionado(s)!");
         }
 
-        System.out.println("\n Total do pedido: R$ " + pedido.calcularTotal());
+        while (true) {
 
+            System.out.println("\n==== Método de Pagamento ====");
+            System.out.println("1 - PIX (10% OFF)");
+            System.out.println("2 - Cartão");
+            System.out.println("3 - Vale Refeição (Taxa de R$2,00)");
+            System.out.print("Escolha uma opção: ");
+
+            int payment = scanner.nextInt();
+
+            switch (payment) {
+                case 1:
+                    pedido.setMetodoPagamento(new PagamentoPix());
+                    break;
+                case 2:
+                    pedido.setMetodoPagamento(new PagamentoCartao());
+                    break;
+                case 3:
+                    pedido.setMetodoPagamento(new PagamentoVoucher());
+                    break;
+                default:
+                    System.out.print("Digite uma opção válida! ");
+                    continue;
+            }
+            System.out.println("\n Total do pedido: R$ " + pedido.calcularTotal());
+            pedido.setStatus(StatusPedido.CRIADO);
+            break;
+        }
+
+        System.out.println("\n==== TIPO DE RETIRADA ====");
+        System.out.println("Digite 'Delivery' para Entrega ou 'Balcao' para Retirada:");
+        System.out.print("Opção: ");
+        String comp = scanner.next();
+
+        while (true) {
+            try {
+                Comprovante comprovante = ComprovanteFactory.criarComprovante(comp, pedido);
+                comprovante.ImprimirComprovante();
+                break;
+
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 }

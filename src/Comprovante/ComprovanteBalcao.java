@@ -11,7 +11,7 @@ public class ComprovanteBalcao implements Comprovante {
     @Override
     public void ImprimirComprovante() {
         System.out.println("====================================");
-        System.out.println("       🧾 COMPROVANTE BALCÃO      ");
+        System.out.println("         COMPROVANTE BALCÃO      ");
         System.out.println("====================================");
         System.out.println(" Status: " + pedido.getStatus());
         System.out.println(" Taxa de Entrega: ISENTO");
